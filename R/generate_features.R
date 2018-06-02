@@ -93,6 +93,7 @@ get_all_bound_features = function(shp){
 get_corners_features = function(shp){
   temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_corner(shp[[2]][[x]]))
   out = do.call(rbind, temp)
+  file.remove("temp.jpg")
   return(out)
 }
 
