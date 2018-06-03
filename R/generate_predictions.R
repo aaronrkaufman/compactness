@@ -1,6 +1,5 @@
-## Runs the main predictiob, which is an ensemble as per Kaufman, King, and Komisarchik (2018)
-
-#' 
+#' Runs the main prediction, which is an ensemble as per Kaufman, King, and Komisarchik (2018)
+#'
 #'
 #' @param features A features object produced by the "generate_features" function
 
@@ -9,9 +8,10 @@
 #'
 #' @examples
 #' filename = "CnclDist_July2012.shp"
-#' shp = read_shapefiles(filename)
+#' namecol = "NAME"
+#' shp = read_shapefiles(filename, namecol)
 #' features = genreate_features(shp)
-#' preds = generate_predictions(features)
+#' preds = generate_predictions(features, shp[[3]])
 
 generate_predictions = function(features, namecol){
   olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))

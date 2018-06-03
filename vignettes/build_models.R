@@ -224,4 +224,4 @@ for(i in 1:6){
 }
 
 models = c(ols, boost, rfm, sv)
-save(models, file="D:/GitHub/compactness_software/compactness/data/models_5_27_18.RData")
+save(models, file="D:/GitHub/compactness_software/compactness/R/sysdata.rda")
