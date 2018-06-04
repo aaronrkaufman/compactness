@@ -17,24 +17,27 @@ library(gbm)
 library(randomForest)
 library(e1071)
 
-source("../R/generate_features.R")
-source("../R/generate_predictions.R")
-source("../R/compactness_wrapper.R")
-source("../R/bounding_geometry.R")
-source("../R/read_shapefiles.R")
-source("../R/harris_variations.R")
+#source("../R/generate_features.R")
+#source("../R/generate_predictions.R")
+#source("../R/compactness_wrapper.R")
+#source("../R/feature_helpers/R")
+#source("../R/read_shapefiles.R")
 
-# Load models
-load("../data/models_5_27_18.RData")
+## Load models
+#load("../data/models_5_27_18.RData")
 
-# Load test data
-shp = "20110727_q2_congressional_final_draft.shp" # California 2011 Congressional district maps
-namecol = "DISTRICT"
-shp = read_shapefiles(shp, namecol)
+## Load test data
+#shp = "20110727_q2_congressional_final_draft.shp" # California 2011 Congressional district maps
+#namecol = "DISTRICT"
+#shp = read_shapefiles(shp, namecol)
 
-# Altnerate test data
-# shp = "CnclDist_July2012.shp"  # LA City Council districts
-# shp = read_shapefiles(shp, "DISTRICT")
+## Altnerate test data
+## shp = "CnclDist_July2012.shp"  # LA City Council districts
+## shp = read_shapefiles(shp, "DISTRICT")
+
+## For this vignette, I need to find out how to locate the .shp file in the R directory
+## Then call that
+
 
 # Generate features
 features = generate_features(shp)
