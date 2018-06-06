@@ -14,4 +14,11 @@ library(randomForest)
 library(e1071)
 library(glmnet)
 
-## Load training data
+## Load training labels
+load("D:/GitHub/compactness_software/data/training_labels.RData")
+
+# Read shapefiles
+sl = "D:/Dropbox/Compactness Shared/Data/Other Shapefiles/both.shp"
+namecol = "NAME"
+shp = read_shapefiles(sl, namecol)
+features = generate_features(shp)

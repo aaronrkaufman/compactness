@@ -19,7 +19,6 @@ library(RcppRoll)
 library(gbm)
 library(randomForest)
 library(e1071)
-library(cleangeo)
 
 source("../R/generate_features.R")
 source("../R/bounding_geometry.R")
