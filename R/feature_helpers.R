@@ -1,4 +1,8 @@
-# Some of the fu
+get_multi_coord = function(projected, id){
+  l = length(projected@polygons[[id]]@Polygons)
+  coords = lapply(1:l, FUN=function(x) projected@polygons[[id]]@Polygons[[x]]@coords)
+  return(coords)
+}
 
 crack_shp = function(coord1){  # a list of polygon coords; list of length 1 in the case of contiguous districts
   if(length(coord1)==1){

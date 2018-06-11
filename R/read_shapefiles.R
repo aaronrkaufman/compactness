@@ -13,12 +13,6 @@
 
 read_shapefiles = function(shp, namecol){ # namecol specifies the id of the column with the district name in it
   
-  get_multi_coord = function(projected, id){
-    l = length(projected@polygons[[id]]@Polygons)
-    coords = lapply(1:l, FUN=function(x) projected@polygons[[id]]@Polygons[[x]]@coords)
-    return(coords)
-  }
-  
   metadata <- tryCatch({
     dists = sf::st_read(shp, quiet=T)
     l = nrow(dists)
