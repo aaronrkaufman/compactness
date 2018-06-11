@@ -130,7 +130,7 @@ get_one_symmetry_noncontig = function(xy){
   # get centroid, get area
   full = do.call(rbind, xy)
   centroid = c(mean(full[,1]), mean(full[,2]))
-  dist_area = sum(sapply(xy, FUN=function(x) areaPolygon(x)/1000000))
+  dist_area = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000))
   
   # make regular sp object
   orig = data.frame(full)
