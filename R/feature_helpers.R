@@ -105,7 +105,8 @@ get_one_corner = function(xy){
   corners_out = harris3(img = "temp.jpg")
   
   ## I need to output the number of corners, the xvar of them, and the yvar of them
-  return(c(corners=nrow(corners_out), xvar = var(corners_out[,1]), yvar=var(corners_out[,2])))
+  return(c(corners=nrow(corners_out), xvar = var(corners_out[,1]), yvar=var(corners_out[,2]),
+           cornervar_ratio = abs(1-(var(corners_out[,1])/var(corners_out[,2])))))
 }
 
 
