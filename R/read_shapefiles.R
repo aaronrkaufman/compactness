@@ -22,6 +22,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
     print(paste("Warning in extracting metadata: ",war))
   }, error = function(err) {
     print(paste("Error in extracting metadata:  ",err))
+    break
   }, finally = {
     print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
   })
@@ -33,6 +34,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
     print("Something weird is going on. Check your namecol input!")
   }, error = function(err) {
     print("Your namecol does not exist in the data set.")
+    break
   }, finally = {
     print("Successfully located the identifier column. ")
   })
@@ -44,6 +46,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Warning in reading coordinates: ",war))
     }, error = function(err) {
       print(paste("Error in reading coordinates:  ",err))
+      break
     }, finally = {
       print(paste("Loaded coordinates for ", l, " districts.", sep=""))
     })
@@ -55,6 +58,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Warning in projecting coordinates: ",war))
     }, error = function(err) {
       print(paste("Error in projecting coordinates:  ",err))
+      break
     }, finally = {
       print(paste("Projected shapefiles for ", l, " districts.", sep=""))
     })    
@@ -65,6 +69,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Warning in extracting coordinates: ",war))
     }, error = function(err) {
       print(paste("Error in extracting coordinates:  ",err))
+      break
     }, finally = {
       print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))
     })      

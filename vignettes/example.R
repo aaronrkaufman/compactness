@@ -1,4 +1,4 @@
-setwd("D:/GitHub/compactness_software/compactness/data")
+setwd("D:/GitHub/compactness_software/Data")
 
 ## Required libraries
 library(sp)
@@ -20,7 +20,7 @@ library(e1071)
 #source("../R/generate_features.R")
 #source("../R/generate_predictions.R")
 #source("../R/compactness_wrapper.R")
-#source("../R/feature_helpers/R")
+#source("../R/feature_helpers.R")
 #source("../R/read_shapefiles.R")
 
 ## Load models
