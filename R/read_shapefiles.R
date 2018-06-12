@@ -24,7 +24,18 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
     print(paste("Error in extracting metadata:  ",err))
   }, finally = {
     print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
-  }) 
+  })
+  
+  
+  namecol_exists <- tryCatch({
+    test = metadata[,namecol]
+  }, warning = function(war) {
+    print("Something weird is going on. Check your namecol input!")
+  }, error = function(err) {
+    print("Your namecol does not exist in the data set.")
+  }, finally = {
+    print("Successfully located the identifier column. ")
+  })
     
     
   temp <- tryCatch({
