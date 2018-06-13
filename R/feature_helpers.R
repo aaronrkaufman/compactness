@@ -164,8 +164,13 @@ get_one_symmetry_noncontig = function(xy){
   }
   
   # Get the unions of the original and the flipped districts
-  xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
-  yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+  if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
+    xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
+    yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+  } else {
+    xunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(xsym2), width=0))
+    yunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(ysym2), width=0))
+  }
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
@@ -225,8 +230,6 @@ get_one_symmetry_contig = function(xy){
 
 ## Source:
 ## http://dwoll.de/rexrepos/posts/diagBounding.html#minimum-bounding-box
-
-
 ## Bounding box
 getBBox <- function(xy) {
   stopifnot(is.matrix(xy), is.numeric(xy), nrow(xy) >= 2, ncol(xy) == 2)

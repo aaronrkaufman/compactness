@@ -16,7 +16,7 @@ library(RcppRoll)
 library(gbm)
 library(randomForest)
 library(e1071)
-
+library(cleangeo)
 #source("../R/generate_features.R")
 #source("../R/generate_predictions.R")
 #source("../R/compactness_wrapper.R")
