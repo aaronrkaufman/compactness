@@ -101,7 +101,7 @@ get_one_corner = function(xy){
     polygon(x = xy[[i]][,1], y=xy[[i]][,2], col="grey", border = "grey")
   }
   dev.off()
-  # Now how do I do this in R...
+  # Call the corners helper on the new image
   corners_out = harris3(img = "temp.jpg")
   
   ## I need to output the number of corners, the xvar of them, and the yvar of them
@@ -164,8 +164,8 @@ get_one_symmetry_noncontig = function(xy){
   }
   
   # Get the unions of the original and the flipped districts
-  xunion = gUnion(orig2, xsym2)
-  yunion = gUnion(orig2, ysym2)
+  xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
+  yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
@@ -207,8 +207,8 @@ get_one_symmetry_contig = function(xy){
   orig2 = SpatialPolygons(list(Polygons(list(Polygon(orig)), ID="orig")))
   
   ## Get unions
-  xunion = gUnion(orig2, xsym2)
-  yunion = gUnion(orig2, ysym2)
+  xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
+  yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
   x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
