@@ -1,8 +1,8 @@
 USEFUL
 -Add parallel support
--Fix self-intersection
 -Change error handling in read_shapefile
 -Add error handling in unreadable districts from readOGR
+-turn my outputs into their own objects
 
 CRITICAL
 -Fix library loading

@@ -164,10 +164,23 @@ get_one_symmetry_noncontig = function(xy){
   }
   
   # Get the unions of the original and the flipped districts
-  if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
-    xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
-    yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
-  } else {
+  #if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
+  
+  xunion = tryCatch({
+    gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
+  }, error = function(e) {
+    print(paste("generic: ",e))
+  }, finally = {
+  })
+  
+  yunion = tryCatch({
+    ys = gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+  },  error = function(e) {
+    print(paste("generic: ",e))
+  }, finally = {
+  })
+  
+  if(class(yunion)=="character" | class(xunion)=="character"){
     xunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(xsym2), width=0))
     yunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(ysym2), width=0))
   }
@@ -214,6 +227,7 @@ get_one_symmetry_contig = function(xy){
   ## Get unions
   xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
   yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+  
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
   x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
@@ -226,7 +240,6 @@ get_one_symmetry_contig = function(xy){
   # out
   return(c(sym_x, sym_y))
 }
-
 
 ## Source:
 ## http://dwoll.de/rexrepos/posts/diagBounding.html#minimum-bounding-box
