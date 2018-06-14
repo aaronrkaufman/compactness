@@ -16,7 +16,8 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
   metadata <- tryCatch({
     dists = sf::st_read(shp, quiet=T)
     l = nrow(dists)
-    metadata = dists
+    metadata = data.frame(dists)
+    metadata = metadata[,-ncol(metadata)]
   }, warning = function(war) {
     # warning handler picks up where error was generated
     print(paste("Warning in extracting metadata: ",war))

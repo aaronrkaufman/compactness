@@ -65,7 +65,6 @@ get_first_features = function(shp){
   pointsvars_sl = data.frame(pointsvars_sl)
   colnames(pointsvars_sl) = c("points", "var_xcoord", "var_ycoord", "varcoord_ratio",
                               "avgline", "varline", "boyce", "lenwid", "jagged", "parts")
-  pointsvars_sl$district = metadata[,namecol]
   return(pointsvars_sl)
 }
 
