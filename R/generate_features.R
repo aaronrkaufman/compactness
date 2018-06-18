@@ -13,17 +13,17 @@
 
 
 generate_features = function(shp){
-  print("Generating features...")
+  if(verbose) print("Generating features...")
   firsts = get_first_features(shp) 
-  print("First features generated")
+  if(verbose) print("First features generated")
   syms = get_symmetry_features(shp) 
   colnames(syms) = c("sym_x", "sym_y")
-  print("Symmetry features generated")
+  if(verbose) print("Symmetry features generated")
   corners = get_corners_features(shp) 
-  print("Corners features generated")
+  if(verbose) print("Corners features generated")
   bounds = get_all_bound_features(shp) 
-  print("Bounding features generated")
+  if(verbose) print("Bounding features generated")
   features = cbind(data.frame(shp[[1]]), firsts, bounds, corners, syms)
-  print("All features generated!")
+  if(verbose) print("All features generated!")
   return(features)
 }

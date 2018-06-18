@@ -11,7 +11,7 @@
 #' read_shapefiles("CnclDist_July2012.shp")
 
 
-read_shapefiles = function(shp, namecol){ # namecol specifies the id of the column with the district name in it
+read_shapefiles = function(shp, namecol, verbose=T){ # namecol specifies the id of the column with the district name in it
   
   metadata <- tryCatch({
     dists = sf::st_read(shp, quiet=T)
@@ -25,7 +25,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
     print(paste("Error in extracting metadata:  ",err))
     break
   }, finally = {
-    print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
+    if(verbose) print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
   })
   
   
@@ -37,7 +37,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
     print("Your namecol does not exist in the data set.")
     break
   }, finally = {
-    print("Successfully located the identifier column. ")
+    if(verbose) print("Successfully located the identifier column. ")
   })
     
     
@@ -49,7 +49,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Error in reading coordinates:  ",err))
       break
     }, finally = {
-      print(paste("Loaded coordinates for ", l, " districts.", sep=""))
+      if(verbose) print(paste("Loaded coordinates for ", l, " districts.", sep=""))
     })
       
   proj <- tryCatch({
@@ -61,7 +61,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Error in projecting coordinates:  ",err))
       break
     }, finally = {
-      print(paste("Projected shapefiles for ", l, " districts.", sep=""))
+      if(verbose) print(paste("Projected shapefiles for ", l, " districts.", sep=""))
     })    
   
   coords <- tryCatch({ # produces a list of lists
@@ -72,7 +72,7 @@ read_shapefiles = function(shp, namecol){ # namecol specifies the id of the colu
       print(paste("Error in extracting coordinates:  ",err))
       break
     }, finally = {
-      print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))
+      if(verbose) print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))
     })      
   
   return(list(metadata, coords, namecol))

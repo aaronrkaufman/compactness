@@ -11,10 +11,10 @@
 #' get_compactness("CnclDist_July2012.shp")
 
 
-get_compactness = function(shp, namecol){ # what optional arguments do I need?
-  files = read_shapefiles(shp, namecol)
-  features = generate_features(files)
+get_compactness = function(shp, namecol, verbose=T){ # what optional arguments do I need?
+  files = read_shapefiles(shp, namecol, verbose)
+  features = generate_features(files, verbose)
   predictions = suppressWarnings(generate_predictions(features, files[[3]])) # everything should be clean now anyway =P
-  ses = predictions- 2 - 0.01 * predictions^2
+  predictions$ses = predictions$compactness- 2 - 0.01 * predictions$compactness^2
 }
 
