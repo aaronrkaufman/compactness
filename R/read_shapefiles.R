@@ -75,6 +75,8 @@ read_shapefiles = function(shp, namecol, verbose=T){ # namecol specifies the id 
       if(verbose) print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))
     })      
   
-  return(list(metadata, coords, namecol))
+  out = structure(list(metadata, coords, namecol), class="compactnessShapefile")
+  
+  return(out)
 }
 
