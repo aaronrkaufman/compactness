@@ -3,7 +3,7 @@
 #' Note that this function takes some time to run, especially with larger sets of districts.
 #'
 #' @param shp A shapefile object produced by "read_shapefiles"
-
+#' @param verbose Default TRUE. Inherited from compactness_wrapper().
 #' @return A data frame, n by p, where n is the number of districts in the shapefile, and p is 17 plus the number of columns in the metadata.
 #'
 #' @examples

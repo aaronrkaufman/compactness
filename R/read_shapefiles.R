@@ -4,14 +4,14 @@
 #'
 #' @param shp The filename of a shp file containing district polygons.
 #' @param namecol The ID of the column with the district name in it
-
+#' @param verbose Default TRUE. Inherited from comapactness_wrapper(). 
 #' @return A list of three: the metadata in n x p where n is the number of districts in the shapefile and p is the number of covariates; a list of lists of n where each sublist is a lat-long matrix, and a sublist of length >1 indicates a noncontiguous district; and the name column
 #'
 #' @examples
 #' read_shapefiles("CnclDist_July2012.shp")
 
 
-read_shapefiles = function(shp, namecol, verbose=T){ # namecol specifies the id of the column with the district name in it
+read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the id of the column with the district name in it
   
   metadata <- tryCatch({
     dists = sf::st_read(shp, quiet=T)

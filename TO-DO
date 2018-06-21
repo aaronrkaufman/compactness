@@ -4,4 +4,4 @@ USEFUL
 -Add error handling in unreadable districts from readOGR
 
 CRITICAL
--Fix library loading
+-Fix library loading - is it a namespace problem?

@@ -4,6 +4,7 @@
 #'
 #' @param shp The filename of a shp file containing district polygons.
 #' @param namecol The name of the variable in the shapefile containing each district's unique identifier
+#' @param verbose Default TRUE. 
 #' @return A vector of length corresponding to number
 #'   of polygons in shp.
 #'
@@ -11,7 +12,7 @@
 #' get_compactness("CnclDist_July2012.shp")
 
 
-get_compactness = function(shp, namecol, verbose=T){ # what optional arguments do I need?
+get_compactness = function(shp, namecol, verbose=TRUE){ # what optional arguments do I need?
   files = read_shapefiles(shp, namecol, verbose)
   features = generate_features(files, verbose)
   predictions = suppressWarnings(generate_predictions(features, files[[3]])) # everything should be clean now anyway =P
