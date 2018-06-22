@@ -2,8 +2,8 @@
 #' 
 #' Estimates the compactness and two standard errors for each polygon in a shp file as per Kaufman, King, and Komisarchik (2018)
 #'
-#' @param shp The filename of a shp file containing district polygons.
-#' @param namecol The name of the variable in the shapefile containing each district's unique identifier
+#' @param shp The filename or filepath of a shp file containing district polygons.
+#' @param namecol The name, in quotes, of the variable in the shapefile containing each district's unique identifier
 #' @param verbose Default TRUE. 
 #' @return A vector of length corresponding to number
 #'   of polygons in shp.

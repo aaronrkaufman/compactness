@@ -13,6 +13,8 @@
 
 read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the id of the column with the district name in it
   
+  try(if(!file.exists(shp)) stop("shp argument must be a filepath!"))
+  
   metadata <- tryCatch({
     dists = sf::st_read(shp, quiet=T)
     l = nrow(dists)

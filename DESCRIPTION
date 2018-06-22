@@ -7,5 +7,5 @@ Depends: R (>= 3.3.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: sp, sf, rgdal, raster, rgeos, png, pracma, jpeg, imager, geosphere, shotGroups, RcppRoll, gbm, randomForest, e1071, maptools, cleangeo
+Imports: sp, sf, rgdal, rgeos, pracma, jpeg, imager, geosphere, shotGroups, RcppRoll, gbm, randomForest, e1071, cleangeo, units
 RoxygenNote: 6.0.1
