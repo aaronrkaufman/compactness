@@ -5,7 +5,7 @@
 #' @param shp A shapefile object produced by "read_shapefiles"
 #' @param verbose Default TRUE. Inherited from compactness_wrapper().
 #' @return A data frame, n by p, where n is the number of districts in the shapefile, and p is 17 plus the number of columns in the metadata.
-#'
+#' @export
 #' @examples
 #' filename = "CnclDist_July2012.shp"
 #' shp = read_shapefiles(filename)

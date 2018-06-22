@@ -7,9 +7,23 @@
 #' @param verbose Default TRUE. 
 #' @return A vector of length corresponding to number
 #'   of polygons in shp.
-#'
+#' @export
 #' @examples
 #' get_compactness("CnclDist_July2012.shp")
+#' @import sp
+#' @import sf
+#' @import rgdal
+#' @import rgeos
+#' @import pracma
+#' @import jpeg
+#' @import imager
+#' @import geosphere
+#' @import shotGroups
+#' @import RcppRoll
+#' @import gbm
+#' @import randomForest
+#' @import e1071
+#' @import cleangeo
 
 
 get_compactness = function(shp, namecol, verbose=TRUE){ # what optional arguments do I need?

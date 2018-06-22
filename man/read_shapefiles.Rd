@@ -4,12 +4,14 @@
 \alias{read_shapefiles}
 \title{This script takes the name a .shp file and breaks it apart into its metadata and coordinates.}
 \usage{
-read_shapefiles(shp, namecol)
+read_shapefiles(shp, namecol, verbose = TRUE)
 }
 \arguments{
 \item{shp}{The filename of a shp file containing district polygons.}
 
 \item{namecol}{The ID of the column with the district name in it}
+
+\item{verbose}{Default TRUE. Inherited from comapactness_wrapper().}
 }
 \value{
 A list of three: the metadata in n x p where n is the number of districts in the shapefile and p is the number of covariates; a list of lists of n where each sublist is a lat-long matrix, and a sublist of length >1 indicates a noncontiguous district; and the name column

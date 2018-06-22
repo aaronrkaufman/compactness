@@ -142,19 +142,19 @@ get_one_symmetry_noncontig = function(xy){
   xsym_df$x =xsym_df$x - 2*(xsym_df$x - centroid[1])
   coordinates(xsym_df) <- ~x+y
   p1 = lapply(1:length(xy), FUN=function(x) Polygon(xsym_df[xsym_df$poly==x,]))
-  xsym2 = SpatialPolygons(list(Polygons(p1, ID="x")))
+  xsym2 = sp::SpatialPolygons(list(sp::Polygons(p1, ID="x")))
   
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
   coordinates(ysym_df) <- ~x+y
-  p2 = lapply(1:length(xy), FUN=function(x) Polygon(ysym_df[ysym_df$poly==x,]))
-  ysym2 = SpatialPolygons(list(Polygons(p2, ID="y")))
+  p2 = lapply(1:length(xy), FUN=function(x) sp::Polygon(ysym_df[ysym_df$poly==x,]))
+  ysym2 = sp::SpatialPolygons(list(sp::Polygons(p2, ID="y")))
   
   # finish setup
   coordinates(orig) = ~x + y
-  p3 = lapply(1:length(xy), FUN=function(x) Polygon(orig[orig$poly==x,]))
-  orig2 = SpatialPolygons(list(Polygons(p3, ID="orig")))
+  p3 = lapply(1:length(xy), FUN=function(x) sp::Polygon(orig[orig$poly==x,]))
+  orig2 = sp::SpatialPolygons(list(sp::Polygons(p3, ID="orig")))
   
   ## Clean up orphaned holes
   for(i in 1:length(xsym2@polygons[[1]]@Polygons)){
@@ -166,30 +166,30 @@ get_one_symmetry_noncontig = function(xy){
   #if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
   
   xunion = tryCatch({
-    gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
+    rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
   }, error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
   
   yunion = tryCatch({
-    ys = gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+    ys = rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
   },  error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
   
   if(class(yunion)=="character" | class(xunion)=="character"){
-    xunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(xsym2), width=0))
-    yunion= gUnion(gBuffer(clgeo_Clean(orig2), width=0), gBuffer(clgeo_Clean(ysym2), width=0))
+    xunion= rgeos::gUnion(rgeos::gBuffer(clgeo_Clean(orig2), width=0), rgeos::gBuffer(clgeo_Clean(xsym2), width=0))
+    yunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0), rgeos::gBuffer(cleangeo::clgeo_Clean(ysym2), width=0))
   }
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
   x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-                      FUN=function(x) areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-                      FUN=function(x) areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -201,7 +201,7 @@ get_one_symmetry_noncontig = function(xy){
 get_one_symmetry_contig = function(xy){
   # get centroid, get area
   centroid = c(mean(xy[,1]), mean(xy[,2]))
-  dist_area = areaPolygon(xy)/1000000
+  dist_area = geosphere::areaPolygon(xy)/1000000
   
   # make regular sp object
   orig = data.frame(xy)
@@ -211,28 +211,28 @@ get_one_symmetry_contig = function(xy){
   xsym_df = orig
   xsym_df$x =xsym_df$x - 2*(xsym_df$x - centroid[1])
   coordinates(xsym_df) <- ~x+y
-  xsym2 = SpatialPolygons(list(Polygons(list(Polygon(xsym_df)), ID="x")))
+  xsym2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(xsym_df)), ID="x")))
   
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
   coordinates(ysym_df) <- ~x+y
-  ysym2 = SpatialPolygons(list(Polygons(list(Polygon(ysym_df)), ID="y")))
+  ysym2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(ysym_df)), ID="y")))
   
   # finish setup
   coordinates(orig) = ~x + y
-  orig2 = SpatialPolygons(list(Polygons(list(Polygon(orig)), ID="orig")))
+  orig2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig)), ID="orig")))
   
   ## Get unions
-  xunion= gUnion(gBuffer(orig2, width=0), gBuffer(xsym2, width=0))
-  yunion= gUnion(gBuffer(orig2, width=0), gBuffer(ysym2, width=0))
+  xunion= rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
+  yunion= rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
   x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-                      FUN=function(x) areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-                      FUN=function(x) areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -314,15 +314,15 @@ getBBox <- function(xy) {
 
 getConvexHull = function(xy){
   hull= xy[chull(xy),]
-  area_sqkm = areaPolygon(hull)/1000000
-  perim = perimeter(hull)/1000
+  area_sqkm = geosphere::areaPolygon(hull)/1000000
+  perim = geosphere::perimeter(hull)/1000
   return(c(area_sqkm, perim))
 }
 
 
 ## Min bounding cirlce
 get_circle = function(xy){
-  temp = getMinCircle(xy)
+  temp = shotGroups::getMinCircle(xy)
   rad = temp$rad * 111.325
   perim = 2 * pi * rad
   area = pi * rad * rad
@@ -332,8 +332,8 @@ get_circle = function(xy){
 
 get_one_bound_feature = function(xy){
   # the key challenge of this script is making sure everything is in the same units
-  dist_area = sum(sapply(xy, FUN=function(x) areaPolygon(x)/1000000))
-  dist_perim = sum(sapply(xy, FUN=function(x) perimeter(x)/1000))
+  dist_area = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000))
+  dist_perim = sum(sapply(xy, FUN=function(x) shotGroups::perimeter(x)/1000))
   
   xy = do.call(rbind, xy)
   
@@ -365,18 +365,16 @@ get_all_bound_features = function(shp){
 }
 
 harris3 = function(img = "temp.jpg", window_size = 5, k = 0.01, thresh = 0.9){
-  require(imager)
-  require(RcppRoll)
-  
-  # read in image
-  image.orig <- load.image(img)
-  image <- grayscale(image.orig)
+
+    # read in image
+  image.orig <- imager::load.image(img)
+  image <- imager::grayscale(image.orig)
   # take first order calculations
   height = ncol(image)
   width = nrow(image)
   
   # Take the gradient of this N-dimensional array that is a pixel image
-  grad = imgradient(image, axes = "xy", scheme = 2)
+  grad = imager::imgradient(image, axes = "xy", scheme = 2)
   dx = as.matrix(grad$x)
   dy = as.matrix(grad$y)
   
@@ -387,9 +385,9 @@ harris3 = function(img = "temp.jpg", window_size = 5, k = 0.01, thresh = 0.9){
   
   ## Since looping in R is slow, we vectorize as much as possible
   ## and do the windowing in cpp with RcppRoll
-  Sxx <- roll_sum(as.vector(dx^2), n = window_size, fill = 0)
-  Sxy <- roll_sum(as.vector(dy * dx), n = window_size, fill = 0)
-  Syy <- roll_sum(as.vector(dy^2), n = window_size, fill = 0)
+  Sxx <- RcppRoll::roll_sum(as.vector(dx^2), n = window_size, fill = 0)
+  Sxy <- RcppRoll::roll_sum(as.vector(dy * dx), n = window_size, fill = 0)
+  Syy <- RcppRoll::roll_sum(as.vector(dy^2), n = window_size, fill = 0)
   
   #Find determinant and trace, use to get corner response
   ## notice that this whole part is now vectorized (and so fast).

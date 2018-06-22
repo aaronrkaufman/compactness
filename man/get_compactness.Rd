@@ -4,12 +4,14 @@
 \alias{get_compactness}
 \title{This is the main function in this package, and the only one you should use normally.}
 \usage{
-get_compactness(shp, namecol)
+get_compactness(shp, namecol, verbose = TRUE)
 }
 \arguments{
 \item{shp}{The filename of a shp file containing district polygons.}
 
 \item{namecol}{The name of the variable in the shapefile containing each district's unique identifier}
+
+\item{verbose}{Default TRUE.}
 }
 \value{
 A vector of length corresponding to number

@@ -4,10 +4,12 @@
 \alias{generate_features}
 \title{Note that this function takes some time to run, especially with larger sets of districts.}
 \usage{
-generate_features(shp)
+generate_features(shp, verbose = TRUE)
 }
 \arguments{
 \item{shp}{A shapefile object produced by "read_shapefiles"}
+
+\item{verbose}{Default TRUE. Inherited from compactness_wrapper().}
 }
 \value{
 A data frame, n by p, where n is the number of districts in the shapefile, and p is 17 plus the number of columns in the metadata.

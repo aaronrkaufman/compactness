@@ -6,7 +6,7 @@
 #' @param namecol The ID of the column with the district name in it
 #' @param verbose Default TRUE. Inherited from comapactness_wrapper(). 
 #' @return A list of three: the metadata in n x p where n is the number of districts in the shapefile and p is the number of covariates; a list of lists of n where each sublist is a lat-long matrix, and a sublist of length >1 indicates a noncontiguous district; and the name column
-#'
+#' @export
 #' @examples
 #' read_shapefiles("CnclDist_July2012.shp")
 
@@ -53,7 +53,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     })
       
   proj <- tryCatch({
-    proj = proj4string(temp)
+    proj = sp::proj4string(temp)
     projected =  spTransform(temp, CRS("+proj=longlat +datum=WGS84"))
     }, warning = function(war) {
       print(paste("Warning in projecting coordinates: ",war))

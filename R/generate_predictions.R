@@ -5,7 +5,7 @@
 
 #' @return A vector of length corresponding to number
 #'   of polygons in the shp.
-#'
+#' @export
 #' @examples
 #' filename = "CnclDist_July2012.shp"
 #' namecol = "NAME"
