@@ -5,8 +5,7 @@
 #' @param shp The filename or filepath of a shp file containing district polygons.
 #' @param namecol The name, in quotes, of the variable in the shapefile containing each district's unique identifier
 #' @param verbose Default TRUE. 
-#' @return A vector of length corresponding to number
-#'   of polygons in shp.
+#' @return A data frame where rows correspond to the number of polygons in shp. The columns include the district identifier, the compactness score where high is less compact, and the standard errors.
 #' @export
 #' @examples
 #' get_compactness("CnclDist_July2012.shp")
