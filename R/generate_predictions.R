@@ -22,6 +22,5 @@ generate_predictions = function(features, namecol){
   preds2 = do.call(cbind, preds)
   preds2 = rowMeans(preds2)
   preds3 = data.frame(district = features[,namecol], compactness = preds2)
-  preds3$SEs = preds3$compactness - 2 - (0.01 * preds3$compactness^2) # std err calculation
   return(preds3)
 }
