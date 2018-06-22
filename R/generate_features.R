@@ -19,7 +19,7 @@ generate_features = function(shp, verbose=TRUE){
   if(verbose) print("Generating features...")
   firsts = get_first_features(shp) 
   if(verbose) print("First features generated")
-  syms = get_symmetry_features(shp) 
+  syms = suppressWarnings(get_symmetry_features(shp))
   colnames(syms) = c("sym_x", "sym_y")
   if(verbose) print("Symmetry features generated")
   corners = get_corners_features(shp) 
