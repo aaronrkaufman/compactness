@@ -333,7 +333,7 @@ get_circle = function(xy){
 get_one_bound_feature = function(xy){
   # the key challenge of this script is making sure everything is in the same units
   dist_area = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000))
-  dist_perim = sum(sapply(xy, FUN=function(x) shotGroups::perimeter(x)/1000))
+  dist_perim = sum(sapply(xy, FUN=function(x) geosphere::perimeter(x)/1000))
   
   xy = do.call(rbind, xy)
   
