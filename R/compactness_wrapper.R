@@ -31,5 +31,6 @@ get_compactness = function(shp, namecol, verbose=TRUE){ # what optional argument
   features = generate_features(files, verbose)
   predictions = suppressWarnings(generate_predictions(features, files[[3]])) # everything should be clean now anyway =P
   predictions$ses = predictions$compactness- 2 - 0.01 * predictions$compactness^2
+  return(predictions)
 }
 
