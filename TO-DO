@@ -4,3 +4,6 @@ USEFUL
 -Add error handling in unreadable districts from readOGR
 
 CRITICAL
+-fix bbox and hull to make sure they're constrained 0-1. they're not handling donuts or large districts correctly. NOTE: Alaska is weird because it splits the meridian. for donuts, it's reading the hole as new area.
+-replace parts with log(parts) and remove the area measures; rather,remove all scale invariant measures; maybe points should be points/perim or points/area?
+-fix vignette code

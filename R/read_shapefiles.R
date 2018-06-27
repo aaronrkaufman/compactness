@@ -64,7 +64,11 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
       break
     }, finally = {
       if(verbose) print(paste("Projected shapefiles for ", l, " districts.", sep=""))
-    })    
+    })
+  
+  #areas = sapply(slot(proj, "polygons"), slot, "area") * 1000000
+  #metadata$district_area = areas
+  # I need area calculated in here. And it needs to identify hole polygons.
   
   coords <- tryCatch({ # produces a list of lists
     coords = lapply(1:length(temp), FUN=function(x) get_multi_coord(proj, x))   
