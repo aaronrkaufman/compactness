@@ -2,8 +2,10 @@ USEFUL
 -Add parallel support
 -Change error handling in read_shapefile
 -Add error handling in unreadable districts from readOGR
+-replace parts with log(parts) and remove the area measures; rather, modify all scale-variant measures: maybe points should be points/perim or points/area?
+
 
 CRITICAL
--fix bbox and hull to make sure they're constrained 0-1. they're not handling donuts or large districts correctly. NOTE: Alaska is weird because it splits the meridian. for donuts, it's reading the hole as new area.
--replace parts with log(parts) and remove the area measures; rather,remove all scale invariant measures; maybe points should be points/perim or points/area?
+-test orphaned hole fix
+-figure out how to handle Alaksa
 -fix vignette code
