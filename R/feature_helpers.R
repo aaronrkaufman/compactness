@@ -369,7 +369,8 @@ correct_for_holes = function(orig_xy){ # this input is a list of xy coords, one 
   
   # figure out which, if any, is a subset of any of the others using gContains
   idx = which(sapply(1:length(exgrid),
-                     FUN=function(x) gContains(orig_xy[[exgrid[i,1]]], orig_xy[[exgrid[i,2]]])))
+                     FUN=function(x) gContains(SpatialPoints(orig_xy[[exgrid[i,1]]], CRS("+proj=longlat +datum=WGS84")),
+                                               SpatialPoints(orig_xy[[exgrid[i,2]]], CRS("+proj=longlat +datum=WGS84")))))
   #print(paste0("Fixing ", length(idx), " orphaned holes."))
   # subtract that area
   if(len(idx) != 0){
