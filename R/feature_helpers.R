@@ -334,6 +334,7 @@ get_one_bound_feature = function(xy){
   # the key challenge of this script is making sure everything is in the same units
   dist_area = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000))
   dist_perim = sum(sapply(xy, FUN=function(x) geosphere::perimeter(x)/1000))
+  orig_xy = xy
   
   xy = do.call(rbind, xy)
   
@@ -350,6 +351,10 @@ get_one_bound_feature = function(xy){
   schwartz = dist_perim / (2 * pi * adj_r)
   polsby = (4 * pi * dist_area)/(dist_perim * dist_perim)
   
+  if(dist_area > hull_area | dist_area > bbox_area){
+    dist_area = correct_for_holes(orig_xy)
+  }
+  
   return(c(hull = dist_area/hull_area, bbox = dist_area/bbox_area, 
            reock = dist_area/circle_area, polsby=polsby, schwartzberg = schwartz,
            circle_area = circle_area, circle_perim = circle_perim,
@@ -357,6 +362,23 @@ get_one_bound_feature = function(xy){
            orig_area = dist_area, district_perim = dist_perim))
 }
 
+correct_for_holes = function(orig_xy){ # this input is a list of xy coords, one for each polygon
+  # expand.grid on the list of polygons
+  exgrid = expand.grid(1:length(orig_xy), 1:length(orig_xy))
+  exgrid = exgrid[exgrid$Var1 != exgrid$Var2,]
+  
+  # figure out which, if any, is a subset of any of the others using gContains
+  idx = which(sapply(1:length(exgrid),
+                     FUN=function(x) gContains(orig_xy[[exgrid[i,1]]], orig_xy[[exgrid[i,2]]])))
+  #print(paste0("Fixing ", length(idx), " orphaned holes."))
+  # subtract that area
+  if(len(idx) != 0){
+    dist_area_new = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000)) - 2*geosphere::areaPolygon(xy[[idx]])
+  } else {
+    dist_area_new = dist_area
+  }
+  return(dist_area_new)
+}
 
 get_all_bound_features = function(shp){
   temp = lapply(1:length(shp[[2]]), FUN=function(x) get_one_bound_feature(shp[[2]][[x]]))
