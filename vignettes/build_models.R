@@ -1,7 +1,7 @@
 ## This script generates the models used in the application
 ## First it generates features, then it builds models
 
-setwd("D:/GitHub/compactness_software/compactness/data")
+setwd("D:/GitHub/compactness_software/data")
 
 ## Required libraries
 library(sp)
@@ -21,11 +21,10 @@ library(randomForest)
 library(e1071)
 
 source("../R/generate_features.R")
-source("../R/bounding_geometry.R")
 source("../R/read_shapefiles.R")
-source("../R/harris_variations.R")
+source("../R/feature_helpers.R")
 
-load("D:/GitHub/compactness_software/compactness/data/training_data.RData")
+load("D:/GitHub/compactness_software/data/training_data.RData")
 
 # Load training labels with old features
 df = do.call(rbind, mylist)

@@ -352,7 +352,7 @@ get_one_bound_feature = function(xy){
   polsby = (4 * pi * dist_area)/(dist_perim * dist_perim)
   
   if(dist_area > hull_area | dist_area > bbox_area){
-    dist_area = correct_for_holes(orig_xy)
+    dist_area = correct_for_holes(orig_xy, dist_area)
   }
   
   return(c(hull = dist_area/hull_area, bbox = dist_area/bbox_area, 
@@ -362,19 +362,19 @@ get_one_bound_feature = function(xy){
            orig_area = dist_area, district_perim = dist_perim))
 }
 
-correct_for_holes = function(orig_xy){ # this input is a list of xy coords, one for each polygon
+correct_for_holes = function(orig_xy, dist_area){ # this input is a list of xy coords, one for each polygon
   # expand.grid on the list of polygons
   exgrid = expand.grid(1:length(orig_xy), 1:length(orig_xy))
   exgrid = exgrid[exgrid$Var1 != exgrid$Var2,]
   
   # figure out which, if any, is a subset of any of the others using gContains
   idx = which(sapply(1:length(exgrid),
-                     FUN=function(x) gContains(SpatialPoints(orig_xy[[exgrid[i,1]]], CRS("+proj=longlat +datum=WGS84")),
-                                               SpatialPoints(orig_xy[[exgrid[i,2]]], CRS("+proj=longlat +datum=WGS84")))))
+                     FUN=function(x) gContains(SpatialPolygons(list(Polygons(list(Polygon(orig_xy[[exgrid[x,1]]])),1))),
+                                               SpatialPolygons(list(Polygons(list(Polygon(orig_xy[[exgrid[x,2]]])),1))))))
   #print(paste0("Fixing ", length(idx), " orphaned holes."))
   # subtract that area
-  if(len(idx) != 0){
-    dist_area_new = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000)) - 2*geosphere::areaPolygon(xy[[idx]])
+  if(length(idx) != 0){
+    dist_area_new = sum(sapply(orig_xy, FUN=function(x) geosphere::areaPolygon(x)/1000000)) - 2*geosphere::areaPolygon(orig_xy[[idx]])/1000000
   } else {
     dist_area_new = dist_area
   }
