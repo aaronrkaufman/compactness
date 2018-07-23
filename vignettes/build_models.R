@@ -4,34 +4,33 @@
 setwd("D:/GitHub/compactness_software/data")
 
 ## Required libraries
-library(sp)
-library(sf)
-library(rgdal)
-library(raster)
-library(rgeos)
-library(png)
-library(pracma)
-library(jpeg)
-library(imager)
-library(geosphere)
-library(shotGroups)
-library(RcppRoll)
-library(gbm)
-library(randomForest)
-library(e1071)
-
-source("../R/generate_features.R")
-source("../R/read_shapefiles.R")
-source("../R/feature_helpers.R")
+# library(sp)
+# library(sf)
+# library(rgdal)
+# library(raster)
+# library(rgeos)
+# library(png)
+# library(pracma)
+# library(jpeg)
+# library(imager)
+# library(geosphere)
+# library(shotGroups)
+# library(RcppRoll)
+# library(gbm)
+# library(randomForest)
+# library(e1071)
+# source("../R/generate_features.R")
+# source("../R/read_shapefiles.R")
+# source("../R/feature_helpers.R")
+library(compactness)
 
 load("D:/GitHub/compactness_software/data/training_data.RData")
 
 # Load training labels with old features
 df = do.call(rbind, mylist)
 
-
 # Read in the from shapefiles
-sl = "D:/Dropbox/Compactness Shared/Data/Other Shapefiles/both.shp" # is this all I need?
+sl = "D:/Dropbox/Compactness Shared/Data/Other Shapefiles/both.shp" # state legislative shapefiles
 namecol = "NAME"
 shp = read_shapefiles(sl, namecol)
 
