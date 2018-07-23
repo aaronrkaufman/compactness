@@ -369,8 +369,8 @@ correct_for_holes = function(orig_xy, dist_area){ # this input is a list of xy c
   
   # figure out which, if any, is a subset of any of the others using gContains
   idx = which(sapply(1:length(exgrid),
-                     FUN=function(x) gContains(SpatialPolygons(list(Polygons(list(Polygon(orig_xy[[exgrid[x,1]]])),1))),
-                                               SpatialPolygons(list(Polygons(list(Polygon(orig_xy[[exgrid[x,2]]])),1))))))
+                     FUN=function(x) rgeos::gContains(sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,1]]])),1))),
+                                                      sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,2]]])),1))))))
   #print(paste0("Fixing ", length(idx), " orphaned holes."))
   # subtract that area
   if(length(idx) != 0){
