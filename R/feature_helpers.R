@@ -299,7 +299,7 @@ getBBox <- function(xy) {
   
   
   ## Convert the bounding box to a shapefile
-  area_sqkm = areaPolygon(pts)/1000000
+  area_sqkm = geosphere::areaPolygon(pts)/1000000
   
   # lenwid
   dists = unique(dist(pts))
@@ -351,7 +351,7 @@ get_one_bound_feature = function(xy){
   schwartz = dist_perim / (2 * pi * adj_r)
   polsby = (4 * pi * dist_area)/(dist_perim * dist_perim)
   
-  if(dist_area > hull_area | dist_area > bbox_area){
+  if((dist_area > hull_area | dist_area > bbox_area) & (length(orig_xy) != 1)){
     dist_area = correct_for_holes(orig_xy, dist_area)
   }
   
@@ -370,7 +370,8 @@ correct_for_holes = function(orig_xy, dist_area){ # this input is a list of xy c
   # figure out which, if any, is a subset of any of the others using gContains
   idx = which(sapply(1:length(exgrid),
                      FUN=function(x) rgeos::gContains(sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,1]]])),1))),
-                                                      sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,2]]])),1))))))
+                                                      sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,2]]])),1)))
+                                                      )))
   #print(paste0("Fixing ", length(idx), " orphaned holes."))
   # subtract that area
   if(length(idx) != 0){
@@ -386,6 +387,21 @@ get_all_bound_features = function(shp){
   out = do.call(rbind, temp)
   return(out)
 }
+
+# for testing errors:
+#out = list()
+#for(i in 1:length(shp_sld[[2]])){
+#  out[[i]] = get_one_bound_feature(shp[[2]][[i]])
+#  print(i)
+#}
+
+#out = list()
+#for(i in 1:length(exgrid)){
+#  out[[i]] = rgeos::gContains(sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[i,1]]])),1))),
+#                              sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[i,2]]])),1))))
+#  print(i)
+#}
+
 
 harris3 = function(img = "temp.jpg", window_size = 5, k = 0.01, thresh = 0.9){
 
