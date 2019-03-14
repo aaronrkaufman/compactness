@@ -1,6 +1,6 @@
 Package: compactness
 Title: Calculate Legislative District Compactness
-Version: 0.1.4
+Version: 1.0.6
 Authors@R: person("Aaron", "Kaufman", email = "aaronkaufman@fas.harvard.edu", role = c("aut", "cre"))
 Description: Implementing the model from Kaufman, King, & Komisarchik 2018, this package provides a variety of tools for measuring various compactness measures for arbitrary GIS shapes, and estimates their Kaufman et al compactness score.
 Depends: R (>= 3.3.2)
