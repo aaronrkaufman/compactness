@@ -140,7 +140,7 @@ get_one_symmetry_noncontig = function(xy){
   # get x-flipped coords, make sp object
   xsym_df = orig
   xsym_df$x =xsym_df$x - 2*(xsym_df$x - centroid[1])
-  coordinates(xsym_df) <- ~x+y
+  sp::coordinates(xsym_df) <- ~x+y
   p1 = lapply(1:length(xy), FUN=function(x) Polygon(xsym_df[xsym_df$poly==x,]))
   xsym2 = sp::SpatialPolygons(list(sp::Polygons(p1, ID="x")))
   
@@ -166,21 +166,21 @@ get_one_symmetry_noncontig = function(xy){
   #if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
   
   xunion = tryCatch({
-    rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
+    raster::union(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
   }, error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
   
   yunion = tryCatch({
-    ys = rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
+    raster::union(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
   },  error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
   
   if(class(yunion)=="character" | class(xunion)=="character"){
-    xunion= rgeos::gUnion(rgeos::gBuffer(clgeo_Clean(orig2), width=0), rgeos::gBuffer(clgeo_Clean(xsym2), width=0))
+    xunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0), rgeos::gBuffer(cleangeo::clgeo_Clean(xsym2), width=0))
     yunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0), rgeos::gBuffer(cleangeo::clgeo_Clean(ysym2), width=0))
   }
   
@@ -210,7 +210,7 @@ get_one_symmetry_contig = function(xy){
   # get x-flipped coords, make sp object
   xsym_df = orig
   xsym_df$x =xsym_df$x - 2*(xsym_df$x - centroid[1])
-  coordinates(xsym_df) <- ~x+y
+  sp::coordinates(xsym_df) <- ~x+y
   xsym2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(xsym_df)), ID="x")))
   
   # get y-flipped coords, get area, make sp object
