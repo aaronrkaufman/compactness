@@ -1,9 +1,0 @@
-USEFUL
--Add parallel support
--Change error handling in read_shapefile
--Add error handling in unreadable districts from readOGR
--replace parts with log(parts) and remove the area measures; rather, modify all scale-variant measures: maybe points should be points/perim or points/area?
-
-
-CRITICAL
--figure out how to handle Alaksa
