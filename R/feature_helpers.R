@@ -147,12 +147,12 @@ get_one_symmetry_noncontig = function(xy){
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
-  sp::coordinates(ysym_df) <- ~x+y
+  coordinates(ysym_df) <- ~x+y
   p2 = lapply(1:length(xy), FUN=function(x) sp::Polygon(ysym_df[ysym_df$poly==x,]))
   ysym2 = sp::SpatialPolygons(list(sp::Polygons(p2, ID="y")))
   
   # finish setup
-  sp::coordinates(orig) = ~x + y
+  coordinates(orig) = ~x + y
   p3 = lapply(1:length(xy), FUN=function(x) sp::Polygon(orig[orig$poly==x,]))
   orig2 = sp::SpatialPolygons(list(sp::Polygons(p3, ID="orig")))
   
@@ -186,12 +186,10 @@ get_one_symmetry_noncontig = function(xy){
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
-  #x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-  #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-  #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  x_area = sum(geosphere::areaPolygon(xunion))/1000000
-  y_area = sum(geosphere::areaPolygon(yunion))/1000000
+  x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
+                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
+                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -218,11 +216,11 @@ get_one_symmetry_contig = function(xy){
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
-  sp::coordinates(ysym_df) <- ~x+y
+  coordinates(ysym_df) <- ~x+y
   ysym2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(ysym_df)), ID="y")))
   
   # finish setup
-  sp::coordinates(orig) = ~x + y
+  coordinates(orig) = ~x + y
   orig2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig)), ID="orig")))
   
   ## Get unions
@@ -231,12 +229,10 @@ get_one_symmetry_contig = function(xy){
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
-  #x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-  #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-  #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  x_area = sum(geosphere::areaPolygon(xunion))/1000000
-  y_area = sum(geosphere::areaPolygon(yunion))/1000000
+  x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
+                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
+                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
