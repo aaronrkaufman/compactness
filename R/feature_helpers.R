@@ -188,10 +188,12 @@ get_one_symmetry_noncontig = function(xy){
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
-  x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  #x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
+  #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
+  #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  x_area = sum(geosphere::areaPolygon(xunion))/1000000
+  y_area = sum(geosphere::areaPolygon(yunion))/1000000
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -231,10 +233,12 @@ get_one_symmetry_contig = function(xy){
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
-  x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
-                      FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
-                      FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  #x_area = sum(sapply(1:length(xunion@polygons[[1]]@Polygons),
+  #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
+  #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
+  x_area = sum(geosphere::areaPolygon(xunion))/1000000
+  y_area = sum(geosphere::areaPolygon(yunion))/1000000
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
