@@ -141,18 +141,18 @@ get_one_symmetry_noncontig = function(xy){
   xsym_df = orig
   xsym_df$x =xsym_df$x - 2*(xsym_df$x - centroid[1])
   sp::coordinates(xsym_df) <- ~x+y
-  p1 = lapply(1:length(xy), FUN=function(x) Polygon(xsym_df[xsym_df$poly==x,]))
+  p1 = lapply(1:length(xy), FUN=function(x) sp::Polygon(xsym_df[xsym_df$poly==x,]))
   xsym2 = sp::SpatialPolygons(list(sp::Polygons(p1, ID="x")))
   
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
-  coordinates(ysym_df) <- ~x+y
+  sp::coordinates(ysym_df) <- ~x+y
   p2 = lapply(1:length(xy), FUN=function(x) sp::Polygon(ysym_df[ysym_df$poly==x,]))
   ysym2 = sp::SpatialPolygons(list(sp::Polygons(p2, ID="y")))
   
   # finish setup
-  coordinates(orig) = ~x + y
+  sp::coordinates(orig) = ~x + y
   p3 = lapply(1:length(xy), FUN=function(x) sp::Polygon(orig[orig$poly==x,]))
   orig2 = sp::SpatialPolygons(list(sp::Polygons(p3, ID="orig")))
   
@@ -180,8 +180,10 @@ get_one_symmetry_noncontig = function(xy){
   })
   
   if(class(yunion)=="character" | class(xunion)=="character"){
-    xunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0), rgeos::gBuffer(cleangeo::clgeo_Clean(xsym2), width=0))
-    yunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0), rgeos::gBuffer(cleangeo::clgeo_Clean(ysym2), width=0))
+    xunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0),
+                          rgeos::gBuffer(cleangeo::clgeo_Clean(xsym2), width=0))
+    yunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0),
+                          rgeos::gBuffer(cleangeo::clgeo_Clean(ysym2), width=0))
   }
   
   # get areas of intersects, calculate ratios
@@ -216,11 +218,11 @@ get_one_symmetry_contig = function(xy){
   # get y-flipped coords, get area, make sp object
   ysym_df = orig
   ysym_df$y =ysym_df$y - 2*(xsym_df$y - centroid[2])
-  coordinates(ysym_df) <- ~x+y
+  sp::coordinates(ysym_df) <- ~x+y
   ysym2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(ysym_df)), ID="y")))
   
   # finish setup
-  coordinates(orig) = ~x + y
+  sp::coordinates(orig) = ~x + y
   orig2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig)), ID="orig")))
   
   ## Get unions

@@ -14,6 +14,7 @@
 #' preds = generate_predictions(features, shp[[3]])
 
 generate_predictions = function(features, namecol){
+  features = features[complete.cases(features), ]
   olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))
   boostpreds = lapply(7:12, FUN=function(x) predict(models[[x]], features, n.trees=100))
   rfpreds = lapply(13:18, FUN=function(x) predict(models[[x]], features))

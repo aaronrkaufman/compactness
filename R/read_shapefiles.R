@@ -19,7 +19,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     dists = sf::st_read(shp, quiet=T)
     l = nrow(dists)
     metadata = data.frame(dists)
-    metadata = metadata[,-ncol(metadata)]
+    metadata = as.data.frame(metadata[,-ncol(metadata)])
   }, warning = function(war) {
     # warning handler picks up where error was generated
     print(paste("Warning in extracting metadata: ",war))
