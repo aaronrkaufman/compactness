@@ -82,7 +82,7 @@ get_all_bound_features = function(shp){
 get_corners_features = function(shp){
   temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_corner(shp[[2]][[x]]))
   out = do.call(rbind, temp)
-  file.remove("temp.jpg")
+  file.remove("temp.png")
   return(out)
 }
 
@@ -92,7 +92,8 @@ get_one_corner = function(xy){
   width = max(full[,1]) - min(full[,1])
   height = max(full[,2]) - min(full[,2])
   ratio = width/height
-  bitmap("temp.jpg", height=1000, width = 1000*ratio, units="px")
+  ratio = min(5, ratio)
+  bitmap("temp.png", height=1000, width = 1000*ratio, units="px")
   plot(0, xlim=c(min(full), max(full[,1])),
        ylim = c(min(full[,2]), max(full[,2])),
        xaxt='n', yaxt='n', xlab=NA, ylab=NA, bty='n')
@@ -101,7 +102,7 @@ get_one_corner = function(xy){
   }
   dev.off()
   # Call the corners helper on the new image
-  corners_out = harris3(img = "temp.jpg")
+  corners_out = harris3(img = "temp.png")
   
   ## I need to output the number of corners, the xvar of them, and the yvar of them
   return(c(corners=nrow(corners_out), xvar = var(corners_out[,1]), yvar=var(corners_out[,2]),
@@ -409,7 +410,7 @@ get_all_bound_features = function(shp){
 #}
 
 
-harris3 = function(img = "temp.jpg", window_size = 5, k = 0.01, thresh = 0.9){
+harris3 = function(img = "temp.png", window_size = 5, k = 0.01, thresh = 0.9){
 
     # read in image
   image.orig <- imager::load.image(img)
