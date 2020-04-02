@@ -5,10 +5,11 @@
 #' @param shp The filename or filepath of a shp file containing district polygons.
 #' @param namecol The name, in quotes, of the variable in the shapefile containing each district's unique identifier
 #' @param verbose Default TRUE. 
+#' @param new.models Default NULL. Should we generate predictions using the built-in model, or a new user-generated model?
 #' @return A data frame where rows correspond to the number of polygons in shp. The columns include the district identifier, the compactness score where high is less compact, and the standard errors.
 #' @export
 #' @examples
-#' get_compactness("CnclDist_July2012.shp")
+#' get_compactness("CnclDist_July2012.shp", "NAME")
 #' @import sp
 #' @import sf
 #' @import rgdal
@@ -25,11 +26,11 @@
 #' @import cleangeo
 
 
-get_compactness = function(shp, namecol, verbose=TRUE){ # what optional arguments do I need?
+get_compactness = function(shp, namecol, verbose=TRUE, new.models = NULL){ 
   files = read_shapefiles(shp, namecol, verbose)
   features = generate_features(files, verbose)
-  predictions = suppressWarnings(generate_predictions(features, files[[3]])) # everything should be clean now anyway =P
-  predictions$ses = predictions$compactness- 2 - 0.01 * predictions$compactness^2
+  predictions = suppressWarnings(generate_predictions(features = features, namecol = files[[3]], new.models = new.models))
+  predictions$ses = predictions$compactness- 2 - 0.01 * predictions$compactness^2 # as per the findings in the appendix
   return(predictions)
 }
 

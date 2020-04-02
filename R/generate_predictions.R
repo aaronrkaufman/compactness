@@ -2,6 +2,8 @@
 #'
 #'
 #' @param features A features object produced by the "generate_features" function
+#' @param namecol A string indicating the ncolumn containing the unique shape identifier
+#' @param new.models  Default NULL. Should we use the built-in predictive models or new, user-generated ones?
 
 #' @return A vector of length corresponding to number
 #'   of polygons in the shp.
@@ -13,12 +15,20 @@
 #' features = genreate_features(shp)
 #' preds = generate_predictions(features, shp[[3]])
 
-generate_predictions = function(features, namecol){
+generate_predictions = function(features, namecol, new.models = NULL){
   features = features[complete.cases(features), ]
-  olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))
-  boostpreds = lapply(7:12, FUN=function(x) predict(models[[x]], features, n.trees=100))
-  rfpreds = lapply(13:18, FUN=function(x) predict(models[[x]], features))
-  svpreds = lapply(19:24, FUN=function(x) predict(models[[x]], features))
+
+  if(is.null(new.models)){
+    olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))
+    boostpreds = lapply(7:12, FUN=function(x) predict(models[[x]], features, n.trees=100))
+    rfpreds = lapply(13:18, FUN=function(x) predict(models[[x]], features))
+    svpreds = lapply(19:24, FUN=function(x) predict(models[[x]], features))
+  } else if(!is.null(new.models)){
+    olspreds = lapply(1:6, FUN=function(x) predict(new.models[[x]], features))
+    boostpreds = lapply(7:12, FUN=function(x) predict(new.models[[x]], features, n.trees=100))
+    rfpreds = lapply(13:18, FUN=function(x) predict(new.models[[x]], features))
+    svpreds = lapply(19:24, FUN=function(x) predict(new.models[[x]], features))
+  }
   preds = c(olspreds, boostpreds, rfpreds, svpreds)
   preds2 = do.call(cbind, preds)
   preds2 = rowMeans(preds2)
