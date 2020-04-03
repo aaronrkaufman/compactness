@@ -93,7 +93,7 @@ get_one_corner = function(xy){
   height = max(full[,2]) - min(full[,2])
   ratio = width/height
   ratio = min(5, ratio)
-  bitmap("temp.png", height=1000, width = 1000*ratio, units="px")
+  png("temp.png", height=1000, width = 1000*ratio, units="px")
   plot(0, xlim=c(min(full), max(full[,1])),
        ylim = c(min(full[,2]), max(full[,2])),
        xaxt='n', yaxt='n', xlab=NA, ylab=NA, bty='n')
