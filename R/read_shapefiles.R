@@ -56,9 +56,9 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
       
   proj <- tryCatch({
     proj = sp::proj4string(temp)
-    projected =  spTransform(temp, CRS("+proj=longlat +datum=WGS84"))
-    }, warning = function(war) {
-      print(paste("Warning in projecting coordinates: ",war))
+    projected =  sp::spTransform(temp, sp::CRS("+proj=longlat +datum=WGS84"))
+#    }, warning = function(war) {
+#      print(paste("Warning in projecting coordinates: ",war))
     }, error = function(err) {
       print(paste("Error in projecting coordinates:  ",err))
       break
@@ -85,4 +85,3 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
   
   return(out)
 }
-
