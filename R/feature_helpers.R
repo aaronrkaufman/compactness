@@ -93,7 +93,7 @@ get_one_corner = function(xy){
   height = max(full[,2]) - min(full[,2])
   ratio = width/height
   ratio = min(5, ratio)
-  png("temp.png", height=1000, width = 1000*ratio, units="px")
+  png("temp.png", height=1000, width = 1000*ratio, units="px", type="cairo-png")
   plot(0, xlim=c(min(full), max(full[,1])),
        ylim = c(min(full[,2]), max(full[,2])),
        xaxt='n', yaxt='n', xlab=NA, ylab=NA, bty='n')
@@ -414,7 +414,11 @@ harris3 = function(img = "temp.png", window_size = 5, k = 0.01, thresh = 0.9){
 
     # read in image
   image.orig <- imager::load.image(img)
-  image <- imager::grayscale(image.orig)
+  image = image.orig[,,,1]
+  image = imager::cimg(array(image,
+                              c(dim(image.orig)[1],
+                                dim(image.orig)[2], 1,1)))
+  #image <- imager::grayscale(image.orig)
   # take first order calculations
   height = ncol(image)
   width = nrow(image)
