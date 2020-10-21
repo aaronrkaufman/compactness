@@ -93,20 +93,20 @@ get_one_corner = function(xy){
   height = max(full[,2]) - min(full[,2])
   ratio = width/height
   ratio = min(5, ratio)
-  #png("temp.png", height=1000, width = 1000*ratio, units="px", type="cairo-png")
-  magick::image_graph()
+  png("temp.png", height=1000, width = 1000*ratio, units="px", type="cairo-png")
+  #magick::image_graph()
   plot(0, xlim=c(min(full), max(full[,1])),
        ylim = c(min(full[,2]), max(full[,2])),
        xaxt='n', yaxt='n', xlab=NA, ylab=NA, bty='n')
   for(i in 1:length(xy)){
     polygon(x = xy[[i]][,1], y=xy[[i]][,2], col="grey", border = "grey")
   }
-  img = magick::image_capture()
-  corners = image.CornerDetectionHarris::image_harris(img)
-  corners_out = cbind(corners[[1]], corners[[2]])
+  #img = magick::image_capture()
+  #corners = image.CornerDetectionHarris::image_harris(img)
+  #corners_out = cbind(corners[[1]], corners[[2]])
   dev.off()
   # Call the corners helper on the new image
-  #corners_out = harris4(img = "temp.png")
+  corners_out = harris4(img = "temp.png")
   
   ## I need to output the number of corners, the xvar of them, and the yvar of them
   return(c(corners=nrow(corners_out), xvar = var(corners_out[,1]), yvar=var(corners_out[,2]),
