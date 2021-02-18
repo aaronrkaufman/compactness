@@ -16,8 +16,10 @@
 #' preds = generate_predictions(features, shp[[3]])
 
 generate_predictions = function(features, namecol, new.models = NULL){
-  features = features[complete.cases(features), ]
-
+  cols_to_check = (ncol(feats)-27):ncol(feats)
+  idx = complete.cases(features[,cols_to_check])
+  features = features[idx,]
+  
   if(is.null(new.models)){
     olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))
     boostpreds = lapply(7:12, FUN=function(x) predict(models[[x]], features, n.trees=100))
