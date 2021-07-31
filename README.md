@@ -1,5 +1,5 @@
 # compactness
-Implements the methodology from Aaron Kaufman, Gary King, and Mayya Komisarchik. Forthcoming. “How to Measure Legislative District Compactness If You Only Know it When You See It,” _American Journal of Political Science_, Vol. 65, No. 3, July 2021, Pp. 533–550, Copy at GaryKing.org/compact.
+Implements the methodology from Aaron Kaufman, Gary King, and Mayya Komisarchik. “How to Measure Legislative District Compactness If You Only Know it When You See It,” _American Journal of Political Science_, Vol. 65, No. 3, July 2021, Pp. 533–550, Copy at GaryKing.org/compact.
 
 Install this package with the following:
 
