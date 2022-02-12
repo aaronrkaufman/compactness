@@ -4,22 +4,23 @@
 \alias{get_compactness}
 \title{This is the main function in this package, and the only one you should use normally.}
 \usage{
-get_compactness(shp, namecol, verbose = TRUE)
+get_compactness(shp, namecol, verbose = TRUE, new.models = NULL)
 }
 \arguments{
-\item{shp}{The filename of a shp file containing district polygons.}
+\item{shp}{The filename or filepath of a shp file containing district polygons.}
 
-\item{namecol}{The name of the variable in the shapefile containing each district's unique identifier}
+\item{namecol}{The name, in quotes, of the variable in the shapefile containing each district's unique identifier}
 
 \item{verbose}{Default TRUE.}
+
+\item{new.models}{Default NULL. Should we generate predictions using the built-in model, or a new user-generated model?}
 }
 \value{
-A vector of length corresponding to number
-  of polygons in shp.
+A data frame where rows correspond to the number of polygons in shp. The columns include the district identifier, the compactness score where high is less compact, and the standard errors.
 }
 \description{
 Estimates the compactness and two standard errors for each polygon in a shp file as per Kaufman, King, and Komisarchik (2018)
 }
 \examples{
-get_compactness("CnclDist_July2012.shp")
+get_compactness("CnclDist_July2012.shp", "NAME")
 }

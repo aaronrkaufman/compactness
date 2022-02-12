@@ -4,10 +4,14 @@
 \alias{generate_predictions}
 \title{Runs the main prediction, which is an ensemble as per Kaufman, King, and Komisarchik (2018)}
 \usage{
-generate_predictions(features, namecol)
+generate_predictions(features, namecol, new.models = NULL)
 }
 \arguments{
 \item{features}{A features object produced by the "generate_features" function}
+
+\item{namecol}{A string indicating the ncolumn containing the unique shape identifier}
+
+\item{new.models}{Default NULL. Should we use the built-in predictive models or new, user-generated ones?}
 }
 \value{
 A vector of length corresponding to number
