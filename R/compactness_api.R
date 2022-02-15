@@ -12,7 +12,7 @@
 
 compactness_api = function(dir, namecol){ # namecol specifies the id of the column with the district name in it
   
-  #dir = "D:/github/compactness-software/data"
+  #dir = "D:/github/compactness-software/R"
   #namecol = "DISTRICT"
   
   f = list.files(dir)

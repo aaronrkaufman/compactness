@@ -20,7 +20,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     l = nrow(dists)
     metadata = data.frame(dists)
     metadata = as.data.frame(metadata[,-ncol(metadata)])
-    if(verbose) print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
+    #if(verbose) print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
   }, warning = function(war) {
     # warning handler picks up where error was generated
     print(paste("Warning in extracting metadata: ",war))
@@ -54,7 +54,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
   proj <- tryCatch({
     proj = sp::proj4string(temp)
     projected =  sp::spTransform(temp, sp::CRS("+proj=longlat +datum=WGS84"))
-    if(verbose) print(paste("Projected shapefiles for ", l, " districts.", sep=""))
+    #if(verbose) print(paste("Projected shapefiles for ", l, " districts.", sep=""))
 #    }, warning = function(war) {
 #      print(paste("Warning in projecting coordinates: ",war))
     }, error = function(err) {
@@ -68,9 +68,9 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
   
   coords <- tryCatch({ # produces a list of lists
     coords = lapply(1:length(temp), FUN=function(x) get_multi_coord(proj, x))
-    if(verbose) print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))   
-    }, warning = function(war) {
-      print(paste("Warning in extracting coordinates: ",war))
+    #if(verbose) print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))   
+    #}, warning = function(war) {
+    #  print(paste("Warning in extracting coordinates: ",war))
     }, error = function(err) {
       print(paste("Error in extracting coordinates:  ",err))
       break
