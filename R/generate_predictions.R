@@ -34,7 +34,7 @@ generate_predictions = function(features, namecol, new.models = NULL, all_featur
   preds = c(olspreds, boostpreds, rfpreds, svpreds)
   preds2 = do.call(cbind, preds)
   preds2 = rowMeans(preds2)
-  if(all_features = TRUE){
+  if(all_features == TRUE){
     preds3 = data.frame(district = features, compactness = preds2)
   }else{
     preds3 = data.frame(district = features[,namecol], compactness = preds2)
