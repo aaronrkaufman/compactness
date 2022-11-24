@@ -20,7 +20,9 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     l = nrow(dists)
     metadata = data.frame(dists)
     metadata = as.data.frame(metadata[,-ncol(metadata)])
-    metadata = metadata[,-which(colSums(is.na(metadata)) > 0)]
+    #if(any(colSums(is.na(metadata)) > 0)){
+    #  metadata = metadata[,-which(colSums(is.na(metadata)) > 0)]
+    #}
     
     #if(verbose) print(paste("You would like to estimate compactness for ", l, " districts.", sep=""))
   }, warning = function(war) {
@@ -33,8 +35,8 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
   
   
   namecol_exists <- tryCatch({
-    test = metadata[,namecol]
-    if(verbose) print("Successfully located the identifier column. ")
+  test = metadata[,namecol]
+  if(verbose) print("Successfully located the identifier column. ")
   }, warning = function(war) {
     print("Something weird is going on. Check your namecol input!")
   }, error = function(err) {
