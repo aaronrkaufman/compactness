@@ -15,7 +15,7 @@
 #' features = genreate_features(shp)
 #' preds = generate_predictions(features, shp[[3]])
 
-generate_predictions = function(features, namecol, new.models = NULL){
+generate_predictions = function(features, namecol, new.models = NULL, all_features = TRUE){
   cols_to_check = (ncol(features)-27):ncol(features)
   idx = complete.cases(features[,cols_to_check])
   features = features[idx,]
@@ -34,7 +34,11 @@ generate_predictions = function(features, namecol, new.models = NULL){
   preds = c(olspreds, boostpreds, rfpreds, svpreds)
   preds2 = do.call(cbind, preds)
   preds2 = rowMeans(preds2)
-  preds3 = data.frame(district = features[,namecol], compactness = preds2)
+  if(all_features = TRUE){
+    preds3 = data.frame(district = features, compactness = preds2)
+  }else{
+    preds3 = data.frame(district = features[,namecol], compactness = preds2)
+  }
   preds3$compactness[preds3$compactness > 100] = 100
   preds3$compactness[preds3$compactness < 0] = 0
   return(preds3)
