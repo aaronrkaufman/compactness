@@ -12,8 +12,6 @@
 #' get_compactness("CnclDist_July2012.shp", "NAME")
 #' @import sp
 #' @import sf
-#' @import rgdal
-#' @import rgeos
 #' @import pracma
 #' @import jpeg
 #' @import imager

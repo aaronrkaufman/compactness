@@ -46,7 +46,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     
     
   temp <- tryCatch({
-    temp = rgdal::readOGR(shp, verbose=F)
+    temp = sf::st_read(shp)
     #if(verbose) print(paste("Loaded coordinates for ", l, " districts.", sep=""))
     #}, warning = function(war) {
     #  print(paste("Warning in reading coordinates: ",war))
@@ -56,8 +56,11 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     })
       
   proj <- tryCatch({
-    proj = sp::proj4string(temp)
-    projected =  sp::spTransform(temp, sp::CRS("+proj=longlat +datum=WGS84"))
+    proj <- sf::st_crs(temp)
+    
+    # Transform the projection to WGS84
+    projected <- sf::st_transform(temp, crs = sf::st_crs(4326))
+    
     #if(verbose) print(paste("Projected shapefiles for ", l, " districts.", sep=""))
 #    }, warning = function(war) {
 #      print(paste("Warning in projecting coordinates: ",war))
@@ -71,7 +74,7 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
   # I need area calculated in here. And it needs to identify hole polygons.
   
   coords <- tryCatch({ # produces a list of lists
-    coords = lapply(1:length(temp), FUN=function(x) get_multi_coord(proj, x))
+    coords = lapply(1:nrow(temp), FUN=function(x) get_multi_coord(proj, x))
     #if(verbose) print(paste("Successfully extracted coordinates from ", l, " districts.", sep=""))   
     #}, warning = function(war) {
     #  print(paste("Warning in extracting coordinates: ",war))

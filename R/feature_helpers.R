@@ -1,6 +1,16 @@
-get_multi_coord = function(projected, id){
-  l = length(projected@polygons[[id]]@Polygons)
-  coords = lapply(1:l, FUN=function(x) projected@polygons[[id]]@Polygons[[x]]@coords)
+#get_multi_coord = function(projected_tmp, id){
+#  geometry <- sf::st_geometry(projected_tmp)[[id]]
+#  # Get the coordinates of the geometry
+#  coords <- lapply(geometry, FUN = function(poly) as.data.frame(poly[[1]])) 
+#  return(coords)
+#}
+
+get_multi_coord = function(projected_tmp, id){
+  geometry <- as.data.frame(sf::st_coordinates(projected_tmp[id,]))
+  polyid = factor(geometry$L2)
+  geometry = geometry[,-c(3,4,5)]
+  # Get the coordinates of the geometry
+  coords <- split(geometry, f = polyid) 
   return(coords)
 }
 
@@ -80,7 +90,11 @@ get_all_bound_features = function(shp){
 ## One part of this code needs to write JPGs to disk, then call a python script (from R) to generate significant corners
 ## To do this, it should be easy to plot the shape with no labels or axes
 get_corners_features = function(shp){
-  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_corner(shp[[2]][[x]]))
+  #temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_corner(shp[[2]][[x]]))
+  temp = list()
+  for(i in 1:nrow(shp[[1]])){
+    temp[[i]] = get_one_corner(shp[[2]][[i]])
+  }
   out = do.call(rbind, temp)
   #file.remove("temp.png")
   return(out)
@@ -171,25 +185,28 @@ get_one_symmetry_noncontig = function(xy){
   #if(gIsValid(orig2) & gIsValid(xsym2) & gIsValid(ysym2)){
   
   xunion = tryCatch({
-    raster::union(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
+    sf::st_union(sf::st_buffer(sf::st_as_sf(orig2), 0), sf::st_buffer(sf::st_as_sf(xsym2), 0))
   }, error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
   
   yunion = tryCatch({
-    raster::union(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
-  },  error = function(e) {
+    sf::st_union(sf::st_buffer(sf::st_as_sf(orig2), 0), sf::st_buffer(sf::st_as_sf(ysym2), 0))
+  }, error = function(e) {
     print(paste("generic: ",e))
   }, finally = {
   })
-  
-  if(class(yunion)=="character" | class(xunion)=="character"){
-    xunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0),
-                          rgeos::gBuffer(cleangeo::clgeo_Clean(xsym2), width=0))
-    yunion= rgeos::gUnion(rgeos::gBuffer(cleangeo::clgeo_Clean(orig2), width=0),
-                          rgeos::gBuffer(cleangeo::clgeo_Clean(ysym2), width=0))
-  }
+
+
+
+if (any(class(yunion) == "character") | any(class(xunion) == "character")) {
+  xunion <- sf::st_union(sf::st_buffer(sf::st_make_valid(sf::st_as_sf(orig2)), 0),
+                     sf::st_buffer(sf::st_make_valid(sf::st_as_sf(xsym2)), 0))
+  yunion <- sf::st_union(sf::st_buffer(sf::st_make_valid(sf::st_as_sf(orig2)), 0),
+                     sf::st_buffer(sf::st_make_valid(sf::st_as_sf(ysym2)), 0))
+}
+
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
@@ -197,8 +214,8 @@ get_one_symmetry_noncontig = function(xy){
   #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
   #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  x_area = sum(geosphere::areaPolygon(xunion))/1000000
-  y_area = sum(geosphere::areaPolygon(yunion))/1000000
+  x_area = sum(geosphere::areaPolygon(sf::as_Spatial(xunion)))/1000000
+  y_area = sum(geosphere::areaPolygon(sf::as_Spatial(yunion)))/1000000
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -233,8 +250,9 @@ get_one_symmetry_contig = function(xy){
   orig2 = sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig)), ID="orig")))
   
   ## Get unions
-  xunion= rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(xsym2, width=0))
-  yunion= rgeos::gUnion(rgeos::gBuffer(orig2, width=0), rgeos::gBuffer(ysym2, width=0))
+  xunion= sf::st_union(sf::st_buffer(sf::st_as_sf(orig2), 0), sf::st_buffer(sf::st_as_sf(xsym2), 0))
+  yunion= sf::st_union(sf::st_buffer(sf::st_as_sf(orig2), 0), sf::st_buffer(sf::st_as_sf(ysym2), 0))
+
   
   # get areas of intersects, calculate ratios
   # Note that these will be lots of islands probably
@@ -242,8 +260,8 @@ get_one_symmetry_contig = function(xy){
   #                    FUN=function(x) geosphere::areaPolygon(xunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
   #y_area = sum(sapply(1:length(yunion@polygons[[1]]@Polygons),
   #                    FUN=function(x) geosphere::areaPolygon(yunion@polygons[[1]]@Polygons[[x]]@coords)/1000000))
-  x_area = sum(geosphere::areaPolygon(xunion))/1000000
-  y_area = sum(geosphere::areaPolygon(yunion))/1000000
+  x_area = sum(geosphere::areaPolygon(sf::as_Spatial(xunion)))/1000000
+  y_area = sum(geosphere::areaPolygon(sf::as_Spatial(yunion)))/1000000
   sym_x = x_area/dist_area
   sym_y = y_area/dist_area
   
@@ -349,8 +367,8 @@ get_one_bound_feature = function(xy){
   
   xy = do.call(rbind, xy)
   
-  bbox_area = getBBox(xy)[1]
-  lenwid = getBBox(xy)[2]
+  bbox_area = getBBox(as.matrix(xy))[1]
+  lenwid = getBBox(as.matrix(xy))[2]
   hull= getConvexHull(xy)
   hull_area = hull[1]
   hull_perim = hull[2]
@@ -380,7 +398,7 @@ correct_for_holes = function(orig_xy, dist_area){ # this input is a list of xy c
   
   # figure out which, if any, is a subset of any of the others using gContains
   idx = which(sapply(1:length(exgrid),
-                     FUN=function(x) rgeos::gContains(sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,1]]])),1))),
+                     FUN=function(x) sf::st_contains(sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,1]]])),1))),
                                                       sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(orig_xy[[exgrid[x,2]]])),1)))
                                                       )))
   #print(paste0("Fixing ", length(idx), " orphaned holes."))

@@ -1,7 +1,7 @@
 library(compactness)
 
 ## Load test data
-shp = "20110727_q2_congressional_final_draft.shp" # California 2011 Congressional district maps
+shp = "data/20110727_q2_congressional_final_draft.shp" # California 2011 Congressional district maps
 namecol = "DISTRICT"
 shp = read_shapefiles(shp, namecol)
 
