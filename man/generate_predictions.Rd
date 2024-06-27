@@ -4,7 +4,7 @@
 \alias{generate_predictions}
 \title{Runs the main prediction, which is an ensemble as per Kaufman, King, and Komisarchik (2018)}
 \usage{
-generate_predictions(features, namecol, new.models = NULL)
+generate_predictions(features, namecol, new.models = NULL, all_features = TRUE)
 }
 \arguments{
 \item{features}{A features object produced by the "generate_features" function}

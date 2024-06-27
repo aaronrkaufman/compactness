@@ -7,5 +7,5 @@ Depends: R (>= 3.3.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: sp, sf, pracma, jpeg, magick, geosphere, shotGroups, RcppRoll, gbm, randomForest, e1071, cleangeo, units, image.CornerDetectionHarris, raster, httr
-RoxygenNote: 7.1.1
+Imports: sp, sf, pracma, imager, jpeg, magick, geosphere, shotGroups, RcppRoll, gbm, randomForest, e1071, cleangeo, units, image.CornerDetectionHarris, raster, httr
+RoxygenNote: 7.3.1
