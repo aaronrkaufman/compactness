@@ -67,9 +67,7 @@ crack_shp = function(coord1){  # a list of polygon coords; list of length 1 in t
 }
 
 get_first_features = function(shp){
-  metadata = data.frame(shp[[1]])
   xy = shp[[2]]
-  namecol = shp[[3]]
   pointsvars_sl = lapply(xy, crack_shp)
   pointsvars_sl = do.call(rbind, pointsvars_sl)
   pointsvars_sl = data.frame(pointsvars_sl)
@@ -81,7 +79,7 @@ get_first_features = function(shp){
 
 ## But I'll have to figure out how to do the arc features here
 get_all_bound_features = function(shp){
-  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(shp[[2]][[x]]))
+  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(x)
   out = do.call(rbind, temp)
   return(out)
 }
@@ -359,22 +357,27 @@ get_circle = function(xy){
 }
 
 
-get_one_bound_feature = function(xy){
-  # the key challenge of this script is making sure everything is in the same units
-  dist_area = sum(sapply(xy, FUN=function(x) geosphere::areaPolygon(x)/1000000))
-  dist_perim = sum(sapply(xy, FUN=function(x) geosphere::perimeter(x)/1000))
-  orig_xy = xy
+get_one_bound_feature = function(x){
+  xy = shp[[2]][x][[1]]
+  xy_sf = shp[[1]][x,]
   
+  # the key challenge of this script is making sure everything is in the same units
+  dist_area = sf::st_area(xy_sf$geometry)/1000000
+  dist_perim = sf::st_perimeter(xy_sf$geometry)/1000
+  
+  orig_xy = xy
   xy = do.call(rbind, xy)
   
-  bbox_area = getBBox(as.matrix(xy))[1]
-  lenwid = getBBox(as.matrix(xy))[2]
+  bbox = sf::st_bbox(xy_sf$geometry)
+  
+  bbox_area = sf::st_area(sf::st_as_sfc(bbox))/1000000
+  lenwid = abs(bbox$xmin - bbox$xmax)/abs(bbox$ymin - bbox$ymax)
   hull= getConvexHull(xy)
   hull_area = hull[1]
   hull_perim = hull[2]
-  circle_data = get_circle(xy)
-  circle_area = circle_data[[1]]
-  circle_perim = circle_data[[2]]
+  circle_data = lwgeom::st_minimum_bounding_circle(xy_sf$geometry)
+  circle_area = sf::st_area(circle_data)/1000000
+  circle_perim = sf::st_perimeter(circle_data)/1000
   
   adj_r = sqrt(dist_area / pi)
   schwartz = dist_perim / (2 * pi * adj_r)

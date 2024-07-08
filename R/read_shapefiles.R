@@ -19,7 +19,6 @@ read_shapefiles = function(shp, namecol, verbose=TRUE){ # namecol specifies the 
     dists = sf::st_read(shp, quiet=T)
     l = nrow(dists)
     metadata = data.frame(dists)
-    metadata = as.data.frame(metadata[,-ncol(metadata)])
     #if(any(colSums(is.na(metadata)) > 0)){
     #  metadata = metadata[,-which(colSums(is.na(metadata)) > 0)]
     #}
