@@ -79,7 +79,7 @@ get_first_features = function(shp){
 
 ## But I'll have to figure out how to do the arc features here
 get_all_bound_features = function(shp){
-  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(x)
+  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(x))
   out = do.call(rbind, temp)
   return(out)
 }
