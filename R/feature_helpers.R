@@ -79,7 +79,7 @@ get_first_features = function(shp){
 
 ## But I'll have to figure out how to do the arc features here
 get_all_bound_features = function(shp){
-  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(x)
+  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_bound_feature(x))
   out = do.call(rbind, temp)
   return(out)
 }
@@ -374,7 +374,9 @@ get_one_bound_feature = function(x){
   lenwid = abs(bbox$xmin - bbox$xmax)/abs(bbox$ymin - bbox$ymax)
   hull= getConvexHull(xy)
   hull_area = hull[1]
+  units(hull_area) = "m^2"
   hull_perim = hull[2]
+  units(hull_perim) = "m"
   circle_data = lwgeom::st_minimum_bounding_circle(xy_sf$geometry)
   circle_area = sf::st_area(circle_data)/1000000
   circle_perim = sf::st_perimeter(circle_data)/1000
@@ -414,11 +416,6 @@ correct_for_holes = function(orig_xy, dist_area){ # this input is a list of xy c
   return(dist_area_new)
 }
 
-get_all_bound_features = function(shp){
-  temp = lapply(1:length(shp[[2]]), FUN=function(x) get_one_bound_feature(shp[[2]][[x]]))
-  out = do.call(rbind, temp)
-  return(out)
-}
 
 # for testing errors:
 #out = list()
@@ -482,4 +479,73 @@ harris4 = function(img = "temp.png"){
   
   out = cbind(pts[[1]], pts[[2]])
   return(out)
+}
+
+
+get_edf_features = function(shp){
+  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_edf(x)
+  out = do.call(rbind, temp)
+  return(out)
+}
+
+crack_voronoi = function(x){
+  tmp = cbind(rVoronoi[[x]]$x, rVoronoi[[x]]$y, x)
+}
+
+
+get_one_edf = function(x){
+  rPoly = shp[[1]][x,]
+  
+  rPolyPts <- sf::st_coordinates(rPoly$geometry)
+  
+  # Perform Voronoi tessellation of those points and extract coordinates of tiles
+  rVoronoi <- deldir::tile.list(deldir::deldir(x = rPolyPts[, 1], y = rPolyPts[, 2]))
+  
+  # extract Voronoi tessellation nodes
+  V.pts <- do.call(rbind, lapply(1:length(rVoronoi),
+                                 function(x) cbind(rVoronoi[[x]]$x, rVoronoi[[x]]$y, x)))
+  V.pts <- data.frame(V.pts)
+  names(V.pts) <- c('x', 'y', 'lineid')
+  
+  # upgrade to sf object
+  rVp <- sf::st_as_sf(V.pts, coords = c('x', 'y'))
+  # copy CRS information from poly -> points
+  sf::st_crs(rVp) <- sf::st_crs(rPoly$geometry)
+  
+  # Get the rVl lines object
+  rVl <- rVp %>% group_by(lineid) %>%
+    dplyr::summarize(do_union=FALSE) %>%  # do_union=FALSE doesn't work as well
+    sf::st_cast("LINESTRING")
+  
+  # Find the points on the Voronoi tiles that fall inside 
+  # the linear feature polygon
+  rLinePts <- sf::st_intersection(rPoly$geometry, rVp)
+  
+  ## Also subset the lines
+  rLines <- sf::st_intersection(rPoly$geometry, rVl)
+  
+  ### EDF now
+  ## I need an ordering of points on the Voronoi diagram
+  ## Then draw all paths from one point to another and identify which points each path contains
+  ## (or at least all ends of a path)
+  ## https://stackoverflow.com/questions/78620564/convert-sf-points-and-multilinestring-to-adjacency-matrix
+  library(sfnetworks)
+  library(sf)
+  
+  network <-
+    rLines %>%
+    st_zm(geom) %>%
+    st_geometry() %>%
+    st_cast("LINESTRING") %>%
+    # back to sfc
+    st_sfc(crs = st_crs(rLines)) %>%
+    # directed graph
+    as_sfnetwork(length_as_weight = TRUE,
+                 directed = TRUE) %>% 
+    # Add sensors as nodes
+    st_network_blend(rLinePts)
+  
+  
+  
+  
 }

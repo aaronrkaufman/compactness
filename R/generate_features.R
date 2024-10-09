@@ -24,9 +24,12 @@ generate_features = function(shp, verbose=TRUE){
   if(verbose) print("Symmetry features generated")
   corners = get_corners_features(shp) 
   if(verbose) print("Corners features generated")
+  #edf = get_edf_features(shp) 
+  #if(verbose) print("EDF feature generated")
   bounds = suppressWarnings(get_all_bound_features(shp))
   if(verbose) print("Bounding features generated")
   features = cbind(data.frame(shp[[1]]), firsts, bounds, corners, syms)
+  #features = cbind(data.frame(shp[[1]]), firsts, bounds, corners, edf, syms)
   if(verbose) print("All features generated!")
   return(features)
 }

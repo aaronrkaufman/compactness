@@ -4,6 +4,7 @@ library(compactness)
 shp = "data/20110727_q2_congressional_final_draft.shp" # California 2011 Congressional district maps
 namecol = "DISTRICT"
 shp = read_shapefiles(shp, namecol)
+units::units_options(allow_mixed=T)
 
 ## Alternate test data
 ## shp = "CnclDist_July2012.shp"  # LA City Council districts
