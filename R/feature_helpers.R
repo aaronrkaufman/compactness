@@ -483,7 +483,7 @@ harris4 = function(img = "temp.png"){
 
 
 get_edf_features = function(shp){
-  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_edf(x)
+  temp = lapply(1:nrow(shp[[1]]), FUN=function(x) get_one_edf(x))
   out = do.call(rbind, temp)
   return(out)
 }
