@@ -29,6 +29,7 @@ generate_features = function(shp, verbose=TRUE){
   bounds = suppressWarnings(get_all_bound_features(shp))
   if(verbose) print("Bounding features generated")
   features = cbind(data.frame(shp[[1]]), firsts, bounds, corners, syms)
+  features = features %>% dplyr::mutate(across(points:sym_y, unlist))
   #features = cbind(data.frame(shp[[1]]), firsts, bounds, corners, edf, syms)
   if(verbose) print("All features generated!")
   return(features)
