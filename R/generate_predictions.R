@@ -16,9 +16,7 @@
 #' preds = generate_predictions(features, shp[[3]])
 
 generate_predictions = function(features, namecol, new.models = NULL, all_features = TRUE){
-  cols_to_check = (ncol(features)-27):ncol(features)
-  idx = complete.cases(features[,cols_to_check])
-  features = features[idx,]
+  features = features[ , apply(features, 2, function(x) !any(is.na(x)))]
   
   if(is.null(new.models)){
     olspreds = lapply(1:6, FUN=function(x) predict(models[[x]], features))
